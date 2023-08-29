@@ -5,7 +5,7 @@ const RAPID_API_KEY = process.env.RAPID_API_KEY;
 
 const useFetch = (endpoint, query) => {
   const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const options = {
@@ -21,7 +21,7 @@ const useFetch = (endpoint, query) => {
   const fetchData = async () => {
     try {
       const response = await axios.request(options);
-      setData(response.data);
+      setData(response.data.data);
       // setLoading(false);
     } catch (error) {
       setError(error);
