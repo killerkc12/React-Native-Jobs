@@ -19,6 +19,7 @@ import {
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
 import useFetch from "../../hook/useFetch";
+import About from "../../components/jobdetails/about/About";
 
 const tabs = ["About", "Qualifications", "Responsibilities"];
 
@@ -29,6 +30,8 @@ const JobDetails = () => {
   const { data, isLoading, error, reFetch } = useFetch("job-details", {
     job_id: params.id,
   });
+
+  console.log(data);
 
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -41,11 +44,23 @@ const JobDetails = () => {
         return (
           <Specifics
             title="Qualifications"
-            points={data[0].job_highlights?.qualifications ?? ["N/A"]}
+            points={data[0].job_highlights?.Qualifications ?? ["N/A"]}
           />
         );
       case "About":
+        return (
+          <About
+            title={activeTab}
+            info={data[0].job_description ?? "No data provided"}
+          />
+        );
       case "Responsibilities":
+        return (
+          <Specifics
+            title={activeTab}
+            points={data[0].job_highlights?.Responsibilities ?? ["N/A"]}
+          />
+        );
       default:
         break;
     }
@@ -100,10 +115,15 @@ const JobDetails = () => {
                 setActiveTab={setActiveTab}
               />
 
-              {displayTabContent}
+              {displayTabContent()}
             </View>
           )}
         </ScrollView>
+        <JobFooter
+          url={
+            data[0]?.job_google_link ?? "https://careers.google.com/job/results"
+          }
+        />
       </>
     </SafeAreaView>
   );
